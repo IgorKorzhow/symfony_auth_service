@@ -5,9 +5,9 @@ namespace App\EventSubscriber\OnKernelException;
 use App\Exceptions\DtoValidationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpFoundation\Response;
 
 class DtoValidationExceptionSubscriber implements EventSubscriberInterface
 {
@@ -25,7 +25,7 @@ class DtoValidationExceptionSubscriber implements EventSubscriberInterface
         if ($exception instanceof DtoValidationException) {
             $response = new JsonResponse([
                 'message' => $exception->getMessage(),
-                'errors'  => $exception->getValidationErrors(),
+                'errors' => $exception->getValidationErrors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
 
             $event->setResponse($response);

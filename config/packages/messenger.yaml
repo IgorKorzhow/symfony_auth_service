@@ -18,13 +18,10 @@ framework:
                         notifications_queue:
                             binding_keys: [ 'notification' ]
 
-            routing:
-                'App\Message\UniversalNotification': notifications
-
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
-            'App\Message\NotificationMessage': async_priority_high
+            'App\Message\NotificationMessage': notifications
 
 # when@test:
 #    framework:

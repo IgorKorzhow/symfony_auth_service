@@ -43,7 +43,7 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode([
-                'name' =>  'test name',
+                'name' => 'test name',
                 'email' => 'test@gmail.com',
                 'password' => 'testpassword',
                 'phone' => '123321',
@@ -73,7 +73,7 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
                     'message' => 'Validation failed',
                     'errors' => [
                         'email' => [
-                            'This value should not be blank.'
+                            'This value should not be blank.',
                         ],
                     ],
                 ],
@@ -93,7 +93,7 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode([
-                'name' =>  $user->getName(),
+                'name' => $user->getName(),
                 'email' => $user->getEmail(),
                 'password' => $user->getPassword(),
                 'phone' => $user->getPhone(),
@@ -115,7 +115,7 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode([
-                'name' =>  $user->getName(),
+                'name' => $user->getName(),
                 'email' => $user->getEmail(),
                 'password' => $user->getPassword(),
                 'phone' => $user->getPhone(),

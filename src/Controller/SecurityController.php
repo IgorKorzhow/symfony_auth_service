@@ -29,7 +29,7 @@ final class SecurityController extends AbstractController
     public function register(
         ValidatorInterface $validator,
         RegisterUserDto $dto,
-        UserRepository  $userRepository,
+        UserRepository $userRepository,
         NotificationDispatcher $dispatcher,
     ): JsonResponse {
         $dto->validate($validator);
@@ -55,7 +55,7 @@ final class SecurityController extends AbstractController
     #[Route('/api/user', name: 'user', methods: ['GET'])]
     public function getAuthenticatedUser(): JsonResponse
     {
-        /** @var $user User */
+        /** @var User $user */
         $user = $this->getUser();
 
         return new JsonResponse([

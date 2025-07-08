@@ -9,10 +9,10 @@ readonly class NotificationMessage
 {
     public function __construct(
         public NotificationTypeEnum $type,
+        public EmailMessageTypeEnum $messageType,
         public ?string $phone = null,
         public ?string $email = null,
         public ?string $promoId = null,
-        public EmailMessageTypeEnum $messageType,
-    )
-    {}
+    ) {
+    }
 }

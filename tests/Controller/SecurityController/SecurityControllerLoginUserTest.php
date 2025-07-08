@@ -3,8 +3,6 @@
 namespace App\Tests\Controller\SecurityController;
 
 use App\Factory\UserFactory;
-use App\Repository\UserRepository;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -48,7 +46,7 @@ final class SecurityControllerLoginUserTest extends WebTestCase
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json'],
             content: json_encode([
-                'name' =>  $user->getName(),
+                'name' => $user->getName(),
                 'email' => 'test@gmail.com',
                 'password' => 'test123',
                 'phone' => $user->getPhone(),

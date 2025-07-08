@@ -25,5 +25,4 @@ class DtoValidationException extends \Exception
     {
         $this->validationErrors = $errors;
     }
-
 }

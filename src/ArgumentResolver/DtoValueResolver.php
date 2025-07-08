@@ -14,8 +14,8 @@ class DtoValueResolver implements ValueResolverInterface
         $dtoClass = $argument->getType();
 
         if (
-            !$dtoClass
-            || !is_subclass_of($dtoClass, AbstractValidationDto::class)
+            ! isset($dtoClass)
+            || ! is_subclass_of($dtoClass, AbstractValidationDto::class)
         ) {
             return [];
         }
@@ -25,4 +25,3 @@ class DtoValueResolver implements ValueResolverInterface
         yield new $dtoClass($data);
     }
 }
-

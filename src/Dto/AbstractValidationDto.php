@@ -3,8 +3,8 @@
 namespace App\Dto;
 
 use App\Exceptions\DtoValidationException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class AbstractValidationDto
 {
@@ -34,4 +34,3 @@ abstract class AbstractValidationDto
         return $errorMessages;
     }
 }
-

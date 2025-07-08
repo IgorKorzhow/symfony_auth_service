@@ -11,11 +11,12 @@ class UniqueEntityFieldValidator extends ConstraintValidator
 {
     public function __construct(
         private readonly ManagerRegistry $registry
-    ) {}
+    ) {
+    }
 
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof UniqueEntityField) {
+        if (! $constraint instanceof UniqueEntityField) {
             throw new UnexpectedTypeException($constraint, UniqueEntityField::class);
         }
 
@@ -29,7 +30,7 @@ class UniqueEntityFieldValidator extends ConstraintValidator
 
         $result = $repository->findOneBy([$constraint->field => $value]);
 
-        if (empty($result)) {
+        if (! isset($result)) {
             return;
         }
 
