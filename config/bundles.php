@@ -11,4 +11,5 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Enqueue\Bundle\EnqueueBundle::class => ['all' => true],
     Enqueue\MessengerAdapter\Bundle\EnqueueAdapterBundle::class => ['all' => true],
+    DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
 ];

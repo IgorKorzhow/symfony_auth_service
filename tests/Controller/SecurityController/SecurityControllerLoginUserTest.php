@@ -11,37 +11,16 @@ final class SecurityControllerLoginUserTest extends WebTestCase
 {
     use Factories;
 
-    private KernelBrowser $client;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->client = static::createClient();
-
-        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
-
-        $this->entityManager->beginTransaction();
-    }
-
-    protected function tearDown(): void
-    {
-        if ($this->entityManager->getConnection()->isTransactionActive()) {
-            $this->entityManager->rollback();
-        }
-
-        $this->entityManager->close();
-        parent::tearDown();
-    }
-
     public function testSuccessLogin(): void
     {
+        $client = static::createClient();
+
         $user = UserFactory::new()->withoutPersisting()->create([
             'email' => 'test@gmail.com',
             'password' => 'test123',
         ]);
 
-        $this->client->request(
+        $client->request(
             method: 'POST',
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json'],
@@ -55,8 +34,7 @@ final class SecurityControllerLoginUserTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
 
-        // TODO: Igor: Work in postman right by here got error in creds
-        $this->client->request(
+        $client->request(
             method: 'POST',
             uri: '/api/login',
             server: ['CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json'],
@@ -66,7 +44,7 @@ final class SecurityControllerLoginUserTest extends WebTestCase
             ]),
         );
 
-        $data = json_decode($this->client->getResponse()->getContent(), true);
+        $data = json_decode($client->getResponse()->getContent(), true);
 
         self::assertResponseIsSuccessful();
         self::assertNotEmpty($data['token']);
@@ -74,9 +52,11 @@ final class SecurityControllerLoginUserTest extends WebTestCase
 
     public function testLoginFailed(): void
     {
+        $client = static::createClient();
+
         $user = UserFactory::new()->withoutPersisting()->create();
 
-        $this->client->request(
+        $client->request(
             method: 'POST',
             uri: '/api/login',
             server: ['CONTENT_TYPE' => 'application/json'],

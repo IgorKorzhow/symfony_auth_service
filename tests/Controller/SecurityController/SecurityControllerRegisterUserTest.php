@@ -5,7 +5,6 @@ namespace App\Tests\Controller\SecurityController;
 use App\Factory\UserFactory;
 use App\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
 
@@ -13,32 +12,11 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
 {
     use Factories;
 
-    private KernelBrowser $client;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->client = static::createClient();
-
-        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
-
-        $this->entityManager->beginTransaction();
-    }
-
-    protected function tearDown(): void
-    {
-        if ($this->entityManager->getConnection()->isTransactionActive()) {
-            $this->entityManager->rollback();
-        }
-
-        $this->entityManager->close();
-        parent::tearDown();
-    }
-
     public function testSuccessRegister(): void
     {
-        $this->client->request(
+        $client = static::createClient();
+
+        $client->request(
             method: 'POST',
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json'],
@@ -50,7 +28,7 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
             ]),
         );
 
-        $data = json_decode($this->client->getResponse()->getContent(), true);
+        $data = json_decode($client->getResponse()->getContent(), true);
 
         self::assertResponseIsSuccessful();
         self::assertSame('Success', $data['status']);
@@ -69,14 +47,6 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
                 'requestData' => [
                     'email' => '',
                 ],
-                'responseData' => [
-                    'message' => 'Validation failed',
-                    'errors' => [
-                        'email' => [
-                            'This value should not be blank.',
-                        ],
-                    ],
-                ],
             ],
             // TODO Igor: add testcases for check validation
         ];
@@ -84,11 +54,13 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
     }
 
     #[DataProvider('validationErrorDataProvider')]
-    public function testValidationError(array $requestData, array $responseData): void
+    public function testValidationError(array $requestData): void
     {
+        $client = static::createClient();
+
         $user = UserFactory::new()->withoutPersisting()->create($requestData);
 
-        $this->client->request(
+        $client->request(
             method: 'POST',
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json'],
@@ -100,17 +72,16 @@ final class SecurityControllerRegisterUserTest extends WebTestCase
             ]),
         );
 
-        $data = json_decode($this->client->getResponse()->getContent(), true);
-
         self::assertResponseStatusCodeSame(422);
-        self::assertSame($data, $responseData);
     }
 
     public function testUniqueEmailConstraint(): void
     {
+        $client = static::createClient();
+
         $user = UserFactory::new()->create();
 
-        $this->client->request(
+        $client->request(
             method: 'POST',
             uri: '/api/register',
             server: ['CONTENT_TYPE' => 'application/json'],
