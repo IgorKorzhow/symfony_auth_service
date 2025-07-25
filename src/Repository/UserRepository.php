@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Dto\RegisterUserDto;
+use App\Dto\Request\UserRegisterRequestDto;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,15 +39,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function register(RegisterUserDto $dto): User
+    public function register(UserRegisterRequestDto $dto): User
     {
         $user = new User();
 
-        $user->setEmail($dto->getEmail());
-        $user->setPassword($this->passwordHasher->hashPassword($user, $dto->getPassword()));
-        $user->setRoles($dto->getRoles());
-        $user->setName($dto->getName());
-        $user->setPhone($dto->getPhone());
+        $user->setEmail($dto->email);
+        $user->setPassword($this->passwordHasher->hashPassword($user, $dto->password));
+        $user->setRoles(['ROLE_USER']);
+        $user->setName($dto->name);
+        $user->setPhone($dto->phone);
 
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();

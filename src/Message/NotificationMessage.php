@@ -3,7 +3,9 @@
 namespace App\Message;
 
 use App\Enum\NotificationTypeEnum;
+use Symfony\Component\Messenger\Attribute\AsMessage;
 
+#[AsMessage('kafka_notification_producer')]
 readonly class NotificationMessage
 {
     public function __construct(
@@ -12,15 +14,5 @@ readonly class NotificationMessage
         public ?string $userEmail = null,
         public ?string $promoId = null,
     ) {
-    }
-
-    public function __toString(): string
-    {
-        return json_encode([
-            'type' => $this->type->value,
-            'userPhone' => $this->userPhone,
-            'userEmail' => $this->userEmail,
-            'promoId' => $this->promoId,
-        ]);
     }
 }

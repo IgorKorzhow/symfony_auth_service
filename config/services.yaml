@@ -18,11 +18,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-
-    App\Service\Kafka\KafkaProducerService:
-        arguments:
-            $brokerList: '%env(KAFKA_BROKER_LIST)%'
-
-    App\Service\Kafka\KafkaTopicManager:
-        arguments:
-            $brokerList: '%env(KAFKA_BROKER_LIST)%'

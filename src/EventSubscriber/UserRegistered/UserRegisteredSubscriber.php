@@ -3,19 +3,18 @@
 namespace App\EventSubscriber\UserRegistered;
 
 use App\Enum\NotificationTypeEnum;
-use App\Enum\TopicNameEnum;
 use App\Event\UserRegisteredEvent;
 use App\Message\NotificationMessage;
-use App\Service\Kafka\KafkaProducerService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsEventListener]
 readonly class UserRegisteredSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private KafkaProducerService $producer,
+        private MessageBusInterface $bus
     ) {
     }
 
@@ -38,9 +37,6 @@ readonly class UserRegisteredSubscriber implements EventSubscriberInterface
             userEmail: $user->getEmail(),
         );
 
-        $this->producer->sendMessage(
-            topicName: TopicNameEnum::NOTIFICATION->value,
-            message: (string) $message,
-        );
+        $this->bus->dispatch($message);
     }
 }
